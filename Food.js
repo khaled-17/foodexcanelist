@@ -1,104 +1,139 @@
-'use client'
-import React, { useState } from 'react'
+"use client";
+import React, { useState } from "react";
+import{products} from './ListFood'
+import{typeList} from './ListType'
 
 export default function Food() {
+ 
 
-const products=[
-  { "name": "بياض بيض", "weight": 300 },
-  { "name": "جبن قريش", "weight": 200 },
-  { "name": "سمك سالمون", "weight": 120 },
-  { "name": "سمك مكرونه", "weight": 120 },
-  { "name": "سمك بلطي", "weight": 120 },
-  { "name": "سردين", "weight": 120 },
-  { "name": "سمك بوري", "weight": 120 },
-  { "name": "سمك فيليه", "weight": 120 },
-  { "name": "جمبري", "weight": 100 },
-  { "name": "كبده", "weight": 130 },
-  { "name": "تونه", "weight": 100 },
-  { "name": "لحم صدور", "weight": 120 },
-  { "name": "کیده دجاج", "weight": 120 },
-  { "name": "لحم ارانب", "weight": 100 },
-  { "name": "لحم احمر", "weight": 120 },
-  { "name": "بيض كامل", "weight": 250 },
-  { "name": "لحم وراك", "weight": 100 },
-  { "name": "فيتا لايت", "weight": 150 },
-  { "name": "فصوص رومي", "weight": 120 },
-  { "name": "روس بيف", "weight": 120 }
-]
+  const [selectedType, setSelectedType] = useState("");
+  const [weight, setWeight] = useState(null);
+  const [note, setNote] = useState(null);
 
 
+  const [wantFood, setWantFood] = useState("");
+  const [wantWeight, setWantWeight] = useState(null);
 
-const [selectedFood, setSelectedFood] = useState('');
-const [weight, setWeight] = useState(null);
+  const [dietFood, setDietFood] = useState("");
+  const [dietWeight, setDietWeight] = useState(null);
+  const [result, setResult] = useState(0);
 
-const [wantFood, setWantFood] = useState('');
-const [wantweight, setWantWeight] = useState(null);
+  const [number, setNumber] = useState("");
 
-const [diteFood, setditeFood] = useState('');
-const [diteweight, setditeWeight] = useState(null);
+  const calculateResult = () => {
+    const calculatedResult = (number * wantWeight) / dietWeight;
+    setResult(calculatedResult);
+  };
 
-const handleChange = (event) => {
-    const foodName = event.target.value;
-    setSelectedFood(foodName);
+  const handleInputChange = (event) => {
+    setNumber(event.target.value);
+  };
 
-    const product = products.find(p => p.name === foodName);
+  const handleChange = (event, set, setWeight) => {
+    console.log("handel change");
+    const value = event.target.value;
+    set(value);
+
+    const product = products.find((p) => p.name === value);
     setWeight(product ? product.weight : null);
-};
-const handleWant = (event) => {
-    const foodName = event.target.value;
-    setWantFood(foodName);
 
-    const product = products.find(p => p.name === wantFood);
-    setWantWeight(product ? product.weight : null);
-};
-const handledite = (event) => {
-    const foodName = event.target.value;
-    setditeFood(foodName);
 
-    const product = products.find(p => p.name === diteFood);
-    setditeWeight(product ? product.weight : null);
-};
-  return (
+    const type = typeList.find((p) => p.type === value);
+
+console.log(type);
+  };
+
+
+  const handleChangeType = (event, set, setWeight) => {
+    console.log("handel change");
+
+
+    setWeight("")
+setNote("")
+setWantFood("")
+setWantWeight("")
+setDietFood("")
+setDietWeight("")
+setResult("")
+setNumber("")
+
+    const value = event.target.value;
+    const type = typeList.find((p) => p.type === value);
     
+    console.log(type);
+    set(type);
+  };
+  const filteredProducts = products.filter((product) => product.type==selectedType.type);
+
+  return (
     <div>
-           <div className="App">
-          
-           
+        <div style={{width:"100%",backgroundColor:"red",display:"flex",flexDirection:"column",justifyContent:"center",alignContent:"center",alignItems:"center"}}>
+            <h1>نوع الطعام :</h1>
+            <select id="diet-select" onChange={(e) => handleChangeType(e, setSelectedType, setDietWeight)}>
+              <option value="">اختر طعاماً</option>
+              {typeList.map((product) => (
+                <option key={product.name} value={product.name}>
+                  {product.name}
+                </option>
+              ))}
+            </select>
+            {selectedType.type}
+            {note}
+           </div>
+      <div className="App">
+        <div className="flex flex-row justify-between bg-green-300 ">
+          <div>
+            <h1>بدلا من :</h1>
+            <select id="diet-select" onChange={(e) => handleChange(e, setDietFood, setDietWeight)}>
+              <option value="">اختر طعاماً</option>
+              {filteredProducts.map((product) => (
+                <option key={product.name} value={product.name}>
+                  {product.name}
+                </option>
+              ))}
+            </select>
+            <h1>{dietFood}</h1>
+            <h1>{dietWeight}</h1> 
+          </div>
 
-  
-<div className="form-group">
-                <label htmlFor="food-select">اريد أكل                  :</label>
-                <select id="food-select" onChange={handleWant}>
-                    <option value="">اختر طعاماً</option>
-                    {products.map(product => (
-                        <option key={product.name} value={product.name}>
-                            {product.name}
-                        </option>
-                    ))}
-                </select>
-                <h1> {wantFood}</h1>
-               
-            </div>
+          <div>
+            <h1>اريد أكل :</h1>
+            <select id="want-select" onChange={(e) => handleChange(e, setWantFood, setWantWeight)}>
+              <option value="">اختر طعاماً</option>
+              {filteredProducts.map((product) => (
+                <option key={product.name} value={product.name}>
+                  {product.name}
+                </option>
+              ))}
+            </select>
 
- <div className="form-group">
-                <label htmlFor="food-select"> بدلا من                  :</label>
-                <select id="food-select" onChange={handledite}>
-                    <option value="">اختر طعاماً</option>
-                    {products.map(product => (
-                        <option key={product.name} value={product.name}>
-                            {product.name}
-                        </option>
-                    ))}
-                </select>
-                 
-             </div>
-                <h1>{diteFood}</h1>
-
+            <h1>{wantFood}</h1>
+            <h1>{wantWeight}</h1>
+           </div>
         </div>
-        <div>
-            <h1>ادخل الكمية المطلوب ان تاكلها وفقا ل برنامج الدايت من {diteFood}</h1>
-            <input v/>
+
+         <div style={{ textAlign: "center", marginTop: "50px", direction: "rtl",display:"flex",flexDirection:"column",justifyContent:"center",alignContent:"center",alignItems:"center" }}>
+          <h1>
+            ادخل كمية <strong>{dietFood}</strong> المطلوب ان تاكلها وفقا لبرنامج الدايت من
+          </h1>
+
+          <input
+            type="number"
+            placeholder="ادخل الكمية المكتوبة فى النظام "
+            value={number}
+            onChange={handleInputChange}
+            style={{ padding: "10px", fontSize: "16px", width: "200px",border:"5px solid black" }}
+          />
+         <button  onClick={calculateResult} style={{ padding: "10px 20px", fontSize: "16px", margin: "10px" ,backgroundColor:"black",color:"white" }}>
+          احسب النتيجة
+        </button>
         </div>
+       {result&& <div id="output" style={{ marginTop: "20px", fontSize: "18px", fontWeight: "bold" }}>
+        <h1>وزن الطعام من  <strong>{" "}{wantFood} {"  "}</strong>الذى تفضل ان تاكله بدلا من  <strong>{" "}{dietFood}{" "}</strong> </h1>
+          هو : {result} جرام
+          <h1> ملحوظة :-  {selectedType.note}</h1>
+        </div>}
+      </div>
     </div>
-  )
+  );
 }
