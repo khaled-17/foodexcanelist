@@ -63,11 +63,11 @@ setNumber("")
     console.log(type);
     set(type);
   };
-  const filteredProducts = products.filter((product) => product.type==selectedType.type);
+  const filteredProducts = products.filter((product) => product?.type==selectedType?.type);
 
   return (
     <div>
-        <div style={{width:"100%",backgroundColor:"red",display:"flex",flexDirection:"column",justifyContent:"center",alignContent:"center",alignItems:"center"}}>
+        <div style={{width:"100%",backgroundColor:"",display:"flex",flexDirection:"column",border:"1px solid black",height:"100px",justifyContent:"center",alignContent:"center",alignItems:"center"}}>
             <h1>نوع الطعام :</h1>
             <select id="diet-select" onChange={(e) => handleChangeType(e, setSelectedType, setDietWeight)}>
               <option value="">اختر طعاماً</option>
